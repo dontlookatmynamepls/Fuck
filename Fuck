@@ -1,0 +1,82 @@
+local SimpleUI = {}
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
+
+function SimpleUI:CreateWindow(title)
+    local ScreenGui = Instance.new("ScreenGui", PlayerGui)
+    ScreenGui.Name = title
+
+    local MainFrame = Instance.new("Frame", ScreenGui)
+    MainFrame.Size = UDim2.new(0, 400, 0, 300)
+    MainFrame.Position = UDim2.new(0.3, 0, 0.2, 0)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.Name = "MainFrame"
+
+    local Title = Instance.new("TextLabel", MainFrame)
+    Title.Size = UDim2.new(1, 0, 0, 40)
+    Title.Text = title
+    Title.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    Title.TextColor3 = Color3.new(1, 1, 1)
+    Title.Font = Enum.Font.SourceSansBold
+    Title.TextSize = 20
+
+    local UIListLayout = Instance.new("UIListLayout", MainFrame)
+    UIListLayout.Padding = UDim.new(0, 5)
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    function SimpleUI:AddButton(text, callback)
+        local Button = Instance.new("TextButton", MainFrame)
+        Button.Size = UDim2.new(1, -10, 0, 30)
+        Button.Text = text
+        Button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        Button.TextColor3 = Color3.new(1, 1, 1)
+        Button.Font = Enum.Font.SourceSans
+        Button.TextSize = 18
+        Button.LayoutOrder = 1
+        Button.MouseButton1Click:Connect(function()
+            pcall(callback)
+        end)
+    end
+
+    function SimpleUI:AddToggle(text, default, callback)
+        local Toggle = Instance.new("TextButton", MainFrame)
+        Toggle.Size = UDim2.new(1, -10, 0, 30)
+        Toggle.Text = text .. ": " .. (default and "ON" or "OFF")
+        Toggle.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        Toggle.TextColor3 = Color3.new(1, 1, 1)
+        Toggle.Font = Enum.Font.SourceSans
+        Toggle.TextSize = 18
+        Toggle.LayoutOrder = 2
+
+        local state = default
+        Toggle.MouseButton1Click:Connect(function()
+            state = not state
+            Toggle.Text = text .. ": " .. (state and "ON" or "OFF")
+            pcall(callback, state)
+        end)
+    end
+
+    function SimpleUI:AddTextbox(placeholder, callback)
+        local TextBox = Instance.new("TextBox", MainFrame)
+        TextBox.Size = UDim2.new(1, -10, 0, 30)
+        TextBox.PlaceholderText = placeholder
+        TextBox.Text = ""
+        TextBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        TextBox.TextColor3 = Color3.new(1, 1, 1)
+        TextBox.Font = Enum.Font.SourceSans
+        TextBox.TextSize = 18
+        TextBox.LayoutOrder = 3
+
+        TextBox.FocusLost:Connect(function(enterPressed)
+            if enterPressed then
+                pcall(callback, TextBox.Text)
+            end
+        end)
+    end
+
+    return SimpleUI
+end
+
+return SimpleUI
