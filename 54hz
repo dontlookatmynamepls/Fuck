@@ -7,6 +7,10 @@ getgenv().autoBuy6 = false
 getgenv().autoBuy7 = false
 getgenv().autoBuy8 = false
 getgenv().autoBuy9 = false
+getgenv().autoBuy10 = false
+getgenv().autoBuy11 = false
+getgenv().autoBuy12 = false
+getgenv().autoBuy13 = false
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/liebertsx/Tora-Library/main/src/librarynew", true))()
 
@@ -16,6 +20,14 @@ local folder = tab:AddFolder("Blood Moon")
 folder:AddLabel({
 	text = "Mua Blood Event",
 	type = "label"
+})
+
+folder:AddToggle({
+	text = "Spam Mua Crate",
+	flag = "toggle12",
+	callback = function(v)
+		getgenv().autoBuy12 = v
+	end
 })
 
 folder:AddToggle({
@@ -58,6 +70,14 @@ folder:AddToggle({
 	end
 })
 
+folder:AddToggle({
+	text = "Spam Mua Blood Owl",
+	flag = "toggle13",
+	callback = function(v)
+		getgenv().autoBuy13 = v
+	end
+})
+
 local folder2 = tab:AddFolder("Easter 2025")
 
 folder2:AddLabel({
@@ -74,10 +94,26 @@ folder2:AddToggle({
 })
 
 folder2:AddToggle({
+	text = "Spam Mua Candy Flower",
+	flag = "toggle11",
+	callback = function(v)
+		getgenv().autoBuy11 = v
+	end
+})
+
+folder2:AddToggle({
 	text = "Spam Mua Red Lolipop",
 	flag = "toggle4",
 	callback = function(v)
 		getgenv().autoBuy4 = v
+	end
+})
+
+folder2:AddToggle({
+	text = "Spam Mua Easter Egg",
+	flag = "toggle10",
+	callback = function(v)
+		getgenv().autoBuy10 = v
 	end
 })
 
@@ -130,7 +166,7 @@ spawn(function()
 				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Chocolate Carrot")
 			end
 			if getgenv().autoBuy4 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Red Lolipop")
+				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Red Lollipop")
 			end
 			if getgenv().autoBuy5 then
 				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Chocolate Sprinkler")
@@ -146,6 +182,18 @@ spawn(function()
 			end
 			if getgenv().autoBuy9 then
 				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Star Caller")
+			end
+			if getgenv().autoBuy10 then
+				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Easter Egg")
+			end
+			if getgenv().autoBuy11 then
+				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Candy Sunflower")
+			end
+			if getgenv().autoBuy12 then
+				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Mysterious Crate")
+			end
+			if getgenv().autoBuy13 then
+				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Blood Owl")
 			end
 		end)
 		wait(0)
