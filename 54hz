@@ -1,203 +1,116 @@
-getgenv().autoBuy1 = false
-getgenv().autoBuy2 = false
-getgenv().autoBuy3 = false
-getgenv().autoBuy4 = false
-getgenv().autoBuy5 = false
-getgenv().autoBuy6 = false
-getgenv().autoBuy7 = false
-getgenv().autoBuy8 = false
-getgenv().autoBuy9 = false
-getgenv().autoBuy10 = false
-getgenv().autoBuy11 = false
-getgenv().autoBuy12 = false
-getgenv().autoBuy13 = false
+local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
 
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/liebertsx/Tora-Library/main/src/librarynew", true))()
+local Window = Luna:CreateWindow({
+	Name = "Flandre Hub",
+	Subtitle = "Grow A Garden",
+	LogoID = nil,
+	LoadingEnabled = true,
+	LoadingTitle = "Welcome To Flandre Hub",
+	LoadingSubtitle = "Grow A Garden",
 
-local tab = library:CreateWindow("GaG/Flandre Hub")
-local folder = tab:AddFolder("Blood Moon")
+	ConfigSettings = {
+		RootFolder = nil,
+		ConfigFolder = "Big Hub"
+	},
 
-folder:AddLabel({
-	text = "Mua Blood Event",
-	type = "label"
+	KeySystem = false,
+	KeySettings = {
+		Title = "Luna Example Key",
+		Subtitle = "Key System",
+		Note = "Please use a HWID key system.",
+		SaveInRoot = false,
+		SaveKey = true,
+		Key = {"Example Key"},
+		SecondAction = {
+			Enabled = false,
+			Type = "Link",
+			Parameter = ""
+		}
+	}
 })
 
-folder:AddToggle({
-	text = "Spam Mua Crate",
-	flag = "toggle12",
-	callback = function(v)
-		getgenv().autoBuy12 = v
-	end
+Luna:Notification({ 
+	Title = "Script làm bởi Huy",
+	Icon = "notifications_active",
+	ImageSource = "Material",
+	Content = "Thank for use my script, pls don't dead"
 })
 
-folder:AddToggle({
-	text = "Spam Mua Night Egg",
-	flag = "toggle7",
-	callback = function(v)
-		getgenv().autoBuy7 = v
-	end
+local Tab = Window:CreateTab({
+	Name = "Main",
+	Icon = "house",
+	ImageSource = "Material",
+	ShowTitle = true
 })
 
-folder:AddToggle({
-	text = "Spam Mua Night Seed",
-	flag = "toggle8",
-	callback = function(v)
-		getgenv().autoBuy8 = v
-	end
+local Label = Tab:CreateLabel({
+	Text = "Script Làm Bởi Huy",
+	Style = 2 -- Luna Labels Have 3 Styles : A Basic Label, A Green Information Label and A Red Warning Label. Look At The Following Image For More Details
 })
 
-folder:AddToggle({
-	text = "Spam Mua Banana",
-	flag = "toggle1",
-	callback = function(v)
-		getgenv().autoBuy1 = v
-	end
-})
+-- Danh sách vật phẩm
+local bloodMoonItems = {
+    "Blood Banana",
+    "Moon Melon",
+    "Night Egg",
+    "Night Seed Pack",
+    "Star Caller",
+    "Mysterious Crate",
+    "Blood Owl"
+}
 
-folder:AddToggle({
-	text = "Spam Mua Melon",
-	flag = "toggle2",
-	callback = function(v)
-		getgenv().autoBuy2 = v
-	end
-})
+local easterItems = {
+    "Chocolate Carrot",
+    "Candy Sunflower",
+    "Red Lollipop",
+    "Easter Egg",
+    "Chocolate Sprinkler",
+    "Candy Blossom"
+}
 
-folder:AddToggle({
-	text = "Spam Mua Star Caller",
-	flag = "toggle9",
-	callback = function(v)
-		getgenv().autoBuy9 = v
-	end
-})
-
-folder:AddToggle({
-	text = "Spam Mua Blood Owl",
-	flag = "toggle13",
-	callback = function(v)
-		getgenv().autoBuy13 = v
-	end
-})
-
-local folder2 = tab:AddFolder("Easter 2025")
-
-folder2:AddLabel({
-	text = "Mua Easter Event",
-	type = "label"
-})
-
-folder2:AddToggle({
-	text = "Spam Mua Chocolate Carrot",
-	flag = "toggle3",
-	callback = function(v)
-		getgenv().autoBuy3 = v
-	end
-})
-
-folder2:AddToggle({
-	text = "Spam Mua Candy Flower",
-	flag = "toggle11",
-	callback = function(v)
-		getgenv().autoBuy11 = v
-	end
-})
-
-folder2:AddToggle({
-	text = "Spam Mua Red Lolipop",
-	flag = "toggle4",
-	callback = function(v)
-		getgenv().autoBuy4 = v
-	end
-})
-
-folder2:AddToggle({
-	text = "Spam Mua Easter Egg",
-	flag = "toggle10",
-	callback = function(v)
-		getgenv().autoBuy10 = v
-	end
-})
-
-folder2:AddToggle({
-	text = "Spam Mua Chocolate Sprinkler",
-	flag = "toggle5",
-	callback = function(v)
-		getgenv().autoBuy5 = v
-	end
-})
-
-folder2:AddToggle({
-	text = "Spam Mua Candy Blossom",
-	flag = "toggle6",
-	callback = function(v)
-		getgenv().autoBuy6 = v
-	end
-})
-
-folder:AddLabel({
-	text = "script làm bởi Huy",
-	type = "label"
-})
-
-folder2:AddLabel({
-	text = "script làm bởi Huy",
-	type = "label"
-})
-
-folder:AddButton({
-	text = "Xóa Script",
-	flag = "button",
-	callback = function()
-library:Close()
-	print("hello world")
+-- Bảng lưu trạng thái toggle cho từng item
+local autoBuy = {}
+for _, item in ipairs(bloodMoonItems) do
+    autoBuy[item] = false
 end
-})
+for _, item in ipairs(easterItems) do
+    autoBuy[item] = false
+end
+
+-- Giao diện Blood Moon
+Tab:CreateSection("Sự kiện Blood Moon")
+for _, item in ipairs(bloodMoonItems) do
+    Tab:CreateToggle({
+        Name = "Auto mua " .. item,
+        CurrentValue = false,
+        Callback = function(value)
+            autoBuy[item] = value
+        end
+    })
+end
+
+-- Giao diện Easter
+Tab:CreateSection("Sự kiện Easter")
+for _, item in ipairs(easterItems) do
+    Tab:CreateToggle({
+        Name = "Auto mua " .. item,
+        CurrentValue = false,
+        Callback = function(value)
+            autoBuy[item] = value
+        end
+    })
+end
 
 -- Vòng lặp auto mua
 spawn(function()
-	while true do
-		pcall(function()
-			if getgenv().autoBuy1 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Blood Banana")
-			end
-			if getgenv().autoBuy2 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Moon Melon")
-			end
-			if getgenv().autoBuy3 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Chocolate Carrot")
-			end
-			if getgenv().autoBuy4 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Red Lollipop")
-			end
-			if getgenv().autoBuy5 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Chocolate Sprinkler")
-			end
-			if getgenv().autoBuy6 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Candy Blossom")
-			end
-			if getgenv().autoBuy7 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Night Egg")
-			end
-			if getgenv().autoBuy8 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Night Seed Pack")
-			end
-			if getgenv().autoBuy9 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Star Caller")
-			end
-			if getgenv().autoBuy10 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Easter Egg")
-			end
-			if getgenv().autoBuy11 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Candy Sunflower")
-			end
-			if getgenv().autoBuy12 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Mysterious Crate")
-			end
-			if getgenv().autoBuy13 then
-				game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer("Blood Owl")
-			end
-		end)
-		wait(0)
-	end
+    while true do
+        pcall(function()
+            for itemName, shouldBuy in pairs(autoBuy) do
+                if shouldBuy then
+                    game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyEventShopStock"):FireServer(itemName)
+                end
+            end
+        end)
+        task.wait(0)
+    end
 end)
-
-library:Init()
